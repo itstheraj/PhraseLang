@@ -1,5 +1,5 @@
 # PhraseLang
-Phrase Lang is a simple, human-readable programming language designed for beginners. Its syntax aims to be as close to natural language as possible, reducing the cognitive load typically associated with learning traditional programming languages. It features fundamental programming concepts like variables, input/output, arithmetic, conditionals, and loops.
+Phrase Lang is a simple, human-readable programming language designed for beginners. Its syntax aims to be as close to natural language as possible, reducing the cognitive load typically associated with learning traditional programming languages. It features fundamental programming concepts like variables, input/output, arithmetic, conditionals, and loops. (This is a WIP Repo BTW)
 
 ## Getting Started
 To run Phrase Lang code, you need the Python interpreter file (e.g., interpreter.py) that contains the lexer, parser, and interpreter components.
@@ -7,7 +7,7 @@ To run Phrase Lang code, you need the Python interpreter file (e.g., interpreter
 ## Run a Script:
 You can import the interpret function and pass a multi-line string containing your Phrase Lang code:
 
-from phrase_lang import interpret
+from interpreter import interpret
 
 my_code = """
 set name to "World"
