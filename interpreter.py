@@ -56,6 +56,7 @@ class TokenType:
     COLON = 'COLON'
     NEWLINE = 'NEWLINE'
     EOF = 'EOF'
+    RIBINDULATING_FLOXYMITE = 'RIBINDULATING_FLOXYMITE'
 
 class Token:
     def __init__(self, type, value, line, column):
@@ -125,6 +126,7 @@ class Lexer:
         'is not': TokenType.IS_NOT,
         'note:': None,
         'This is a description:': None,
+        'ribindulating floxymite': TokenType.RIBINDULATING_FLOXYMITE,
     }
 
     TOKEN_PATTERNS = [
@@ -144,6 +146,7 @@ class Lexer:
         (r'\bis not\b', TokenType.IS_NOT),
         (r'\bnote:\b', 'COMMENT_START'),
         (r'\bThis is a description:\b', 'COMMENT_START'),
+        (r'\bribindulating floxymite\b', TokenType.RIBINDULATING_FLOXYMITE),
         (r'\bshow\b', TokenType.SHOW),
         (r'\bdisplay\b', TokenType.DISPLAY),
         (r'\btell\b', TokenType.TELL),
@@ -273,6 +276,13 @@ class InputNode(ASTNode):
 
     def __repr__(self):
         return f"InputNode(prompt={self.prompt_expression}, id={self.identifier})"
+
+class EasterEggNode(ASTNode):
+    def __init__(self, token):
+        super().__init>(token)
+
+    def __repr__(self):
+        return f"EasterEggNode()"
 
 class BinaryOpNode(ASTNode):
     def __init__(self, token, left, op, right):
@@ -587,6 +597,10 @@ class Parser:
                 self._eat(TokenType.NEWLINE)
         return statements
 
+    def _parse_easter_egg_statement(self):
+        egg_token = self._eat(TokenType.RIBINDULATING_FLOXYMITE)
+        return EasterEggNode(egg_token)
+
     def _parse_if_statement(self):
         if_token = self._eat(TokenType.IF)
         condition = self._comparison_expression()
@@ -675,6 +689,8 @@ class Parser:
             stmt = self._expression()
             if not isinstance(stmt, AssignmentNode):
                  raise ParserError(f"Expected 'calculate ... as ...' statement, but parse resulted in {stmt}", self.current_token)
+        elif token_type == TokenType.RIBINDULATING_FLOXYMITE:
+            stmt = self._parse_easter_egg_statement()
         elif token_type == TokenType.EOF:
             return None
         else:
@@ -741,6 +757,9 @@ class Interpreter:
         var_name = node.identifier.name
         value = self._get_value(node.value_expression)
         self.variables[var_name] = value
+
+    def visit_EasterEggNode(self, node):
+        print("Aha! You found the secret! A ribindulating floxymite is something I put here for you to find - it is like the Sampo from the Kalevala. You'd never know it was a bowl, or a ring, or a sword, or the answer to life. Keep practicing phrase_lang - it will tell you the answer to what this is!!!")
 
     def visit_InputNode(self, node):
         prompt = self._get_value(node.prompt_expression) if node.prompt_expression else ""
